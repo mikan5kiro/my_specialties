@@ -204,7 +204,45 @@
   line-height: 1.6;
 }
 
-/* ========== 底部间距 ========== */
+/* ========== 操作按钮区（透明悬浮在底部） ========== */
+.detail-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 16rpx;
+  padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
+  background: transparent;
+  z-index: 100;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  padding: 20rpx 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-card);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+.action-icon {
+  font-size: 28rpx;
+}
+
+.action-text {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+}
+
+.action-delete .action-text {
+  color: var(--color-error);
+}
+
+/* ========== 底部间距（为悬浮按钮留空） ========== */
 .detail-footer {
-  height: 40rpx;
+  height: 140rpx;
 }

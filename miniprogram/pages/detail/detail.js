@@ -117,5 +117,44 @@ Page({
   // 返回上一页
   goBack() {
     wx.navigateBack()
+  },
+
+  // 切换"最近想做"状态
+  onToggleWant() {
+    const recipe = this.data.recipe
+    recipe.recent = !recipe.recent
+    this.setData({ recipe })
+    wx.showToast({
+      title: recipe.recent ? '已标记为最近想做' : '已取消标记',
+      icon: 'none'
+    })
+  },
+
+  // 编辑菜谱
+  onEdit() {
+    wx.showToast({
+      title: '编辑功能开发中',
+      icon: 'none'
+    })
+  },
+
+  // 删除菜谱
+  onDelete() {
+    wx.showModal({
+      title: '确认删除',
+      content: `确定要删除"${this.data.recipe.name}"吗？`,
+      confirmColor: '#E74C3C',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showToast({
+            title: '已删除',
+            icon: 'success'
+          })
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 1500)
+        }
+      }
+    })
   }
 })
