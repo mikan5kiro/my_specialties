@@ -1,0 +1,81 @@
+<!-- 详情页 - 所有内容合并为一个卡片 -->
+<view class="detail-container">
+  <!-- 唯一卡片：图片/标题/标签/信息/食材/做法/小贴士 -->
+  <view class="detail-card">
+    <!-- 图片区域：标题和标签覆盖在图片上 -->
+    <view class="detail-image-wrap">
+      <image class="detail-cover" src="{{recipe.coverImage || '/images/default-food.png'}}" mode="aspectFill"></image>
+      <view class="detail-image-overlay">
+        <text class="detail-title">{{recipe.name}}</text>
+        <view class="detail-tags">
+          <view class="detail-tag ingredient-tag">{{recipe.ingredientLabel || '猪肉'}}</view>
+          <view class="detail-tag type-tag">{{recipe.typeLabel}}</view>
+          <view class="detail-tag scene-tag">{{recipe.sceneLabel || '宴客菜'}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 信息栏 -->
+    <view class="detail-info-bar">
+      <view class="info-item">
+        <text class="info-icon">⏱</text>
+        <text class="info-text">{{recipe.duration || '90分钟'}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-icon">👥</text>
+        <text class="info-text">{{recipe.servings || '4人份'}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-icon">⭐</text>
+        <text class="info-text">{{recipe.rating}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-icon">💕</text>
+        <text class="info-text">做过{{recipe.cookCount}}次</text>
+      </view>
+    </view>
+
+    <!-- 食材区域 -->
+    <view class="detail-content-section">
+      <view class="section-header">
+        <text class="section-icon">🥘</text>
+        <text class="section-title">食材</text>
+      </view>
+      <view class="ingredients-list">
+        <view class="ingredient-item" wx:for="{{recipe.ingredients || defaultIngredients}}" wx:key="index">
+          <text class="ingredient-name">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 做法区域 -->
+    <view class="detail-content-section">
+      <view class="section-header">
+        <text class="section-icon">📖</text>
+        <text class="section-title">做法</text>
+      </view>
+      <view class="steps-list">
+        <view class="step-item" wx:for="{{recipe.steps || defaultSteps}}" wx:key="index">
+          <view class="step-number">{{index + 1}}</view>
+          <text class="step-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 小贴士区域 -->
+    <view class="detail-content-section" wx:if="{{recipe.tips || defaultTips}}">
+      <view class="tip-section">
+        <view class="section-header">
+          <text class="section-icon">💡</text>
+          <text class="section-title">小贴士</text>
+        </view>
+        <view class="tip-content">
+          <text class="tip-text">{{recipe.tips || defaultTips}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部间距 -->
+  <view class="detail-footer"></view>
+</view>

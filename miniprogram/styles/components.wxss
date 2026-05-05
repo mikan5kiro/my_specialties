@@ -161,6 +161,9 @@
 /* ========== 标签筛选区 ========== */
 .filter-section {
   background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  margin: 0 var(--space-md) var(--space-md);
 }
 
 .filter-group {

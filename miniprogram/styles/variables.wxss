@@ -21,6 +21,7 @@ page {
 --color-text-muted: #999999;
 --color-text-light: #7b3306;
 --color-text-placeholder: #848482;
+--color-text-dark: #364153;
 
 /* 功能色 - 稍微柔一点 */
 --color-star: #F5B50A;
