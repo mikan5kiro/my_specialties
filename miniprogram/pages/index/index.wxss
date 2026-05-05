@@ -1,5 +1,7 @@
 /** 首页样式 */
 
+@import '../../styles/components.wxss';
+
 .home-container {
   min-height: 100vh;
   padding-bottom: 120rpx;
@@ -25,4 +27,10 @@
   .recipe-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.filter-chip.active {
+  background: #ffb900 !important;
+  color: #ffffff !important;
+  border-color: #ffb900 !important;
 }

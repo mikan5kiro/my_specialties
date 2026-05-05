@@ -1,3 +1,16 @@
+<wxs module="utils">
+  function hasValue(arr, value) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] === value) {
+        return true;
+      }
+    }
+    return false;
+  }
+  module.exports = {
+    hasValue: hasValue
+  }
+</wxs>
 <!-- 首页 - 搜索+排序+筛选 三合一 -->
 <view class="home-container">
   <!-- 页面头部 -->
@@ -22,67 +35,143 @@
     <text class="search-bar-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
   </view>
 
-  <!-- 筛选标签 -->
-  <scroll-view class="filter-bar hide-scrollbar" scroll-x enhanced show-scrollbar="{{false}}">
-    <view
-      class="filter-tag {{activeFilter === 'all' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="all"
-    >全部</view>
-    <view
-      class="filter-tag {{activeFilter === 'chicken' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="chicken"
-    >鸡肉</view>
-    <view
-      class="filter-tag {{activeFilter === 'beef' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="beef"
-    >牛肉</view>
-    <view
-      class="filter-tag {{activeFilter === 'pork' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="pork"
-    >猪肉</view>
-    <view
-      class="filter-tag {{activeFilter === 'seafood' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="seafood"
-    >海鲜</view>
-    <view
-      class="filter-tag {{activeFilter === 'vegetable' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="vegetable"
-    >素菜</view>
-    <view
-      class="filter-tag {{activeFilter === 'soup' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="soup"
-    >汤羹</view>
-    <view
-      class="filter-tag {{activeFilter === 'dessert' ? 'active' : ''}}"
-      bindtap="onFilterTap"
-      data-filter="dessert"
-    >烘焙</view>
-  </scroll-view>
+  <!-- 排序和筛选栏 -->
+  <view class="sort-filter-bar">
+    <!-- 下拉菜单（三Tab） -->
+    <view class="sort-dropdown">
+      <view class="sort-dropdown-trigger" bindtap="toggleSortDropdown">
+        <text class="sort-dropdown-icon">{{currentSortIcon}}</text>
+        <text class="sort-dropdown-text">{{currentSortText}}</text>
+        <text class="sort-dropdown-arrow">{{sortDropdownOpen ? '▲' : '▼'}}</text>
+      </view>
+      <view class="sort-dropdown-menu" wx:if="{{sortDropdownOpen}}">
+        <view
+          class="sort-dropdown-item {{activeSort === 'default' ? 'active' : ''}}"
+          bindtap="onSortSelect"
+          data-sort="default"
+        >
+          <text class="sort-dropdown-item-icon">📋</text>
+          <text>按添加顺序排序</text>
+        </view>
+        <view
+          class="sort-dropdown-item {{activeSort === 'favorite' ? 'active' : ''}}"
+          bindtap="onSortSelect"
+          data-sort="favorite"
+        >
+          <text class="sort-dropdown-item-icon">❤️</text>
+          <text>按喜爱程度排序</text>
+        </view>
+        <view
+          class="sort-dropdown-item {{activeSort === 'frequent' ? 'active' : ''}}"
+          bindtap="onSortSelect"
+          data-sort="frequent"
+        >
+          <text class="sort-dropdown-item-icon">🔥</text>
+          <text>按制作次数排序</text>
+        </view>
+        <view
+          class="sort-dropdown-item {{activeSort === 'recent' ? 'active' : ''}}"
+          bindtap="onSortSelect"
+          data-sort="recent"
+        >
+          <text class="sort-dropdown-item-icon">📝</text>
+          <text>最近想做</text>
+        </view>
+      </view>
+    </view>
 
-  <!-- Tab 切换 -->
-  <view class="tab-bar">
-    <view
-      class="tab-item {{activeTab === 'frequent' ? 'active' : ''}}"
-      bindtap="onTabTap"
-      data-tab="frequent"
-    >我常做的</view>
-    <view
-      class="tab-item {{activeTab === 'favorite' ? 'active' : ''}}"
-      bindtap="onTabTap"
-      data-tab="favorite"
-    >我爱吃的</view>
-    <view
-      class="tab-item {{activeTab === 'recent' ? 'active' : ''}}"
-      bindtap="onTabTap"
-      data-tab="recent"
-    >最近想做</view>
+    <!-- 筛选按钮 -->
+    <view class="filter-toggle-btn" bindtap="toggleFilterPanel">
+      <text class="filter-toggle-icon">⚙️</text>
+      <text class="filter-toggle-text">{{filterPanelOpen ? '收起' : '筛选'}}</text>
+    </view>
+  </view>
+
+  <!-- 分割线 -->
+  <view class="divider-line"></view>
+
+  <!-- 标签筛选区（默认隐藏） -->
+  <view class="filter-section" wx:if="{{filterPanelOpen}}">
+    <!-- 食材标签 -->
+    <view class="filter-group">
+      <view class="filter-group-header" bindtap="toggleFilterGroup" data-group="ingredient">
+        <view class="filter-group-title">🍖 食材</view>
+        <text class="filter-group-arrow">{{filterExpand.ingredient ? '▼' : '▶'}}</text>
+      </view>
+      <view class="filter-group-body" wx:if="{{filterExpand.ingredient}}">
+        <scroll-view class="filter-group-scroll hide-scrollbar" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="filter-group-content">
+            <view
+              class="filter-chip {{utils.hasValue(selectedIngredients, 'all') ? 'active' : ''}}"
+              bindtap="toggleIngredient"
+              data-value="all"
+            >全部</view>
+            <view
+              wx:for="{{ingredients}}"
+              wx:key="value"
+              class="filter-chip {{utils.hasValue(selectedIngredients, item.value) ? 'active' : ''}}"
+              bindtap="toggleIngredient"
+              data-value="{{item.value}}"
+            >{{item.label}}</view>
+          </view>
+        </scroll-view>
+        <view class="scroll-indicator">→</view>
+      </view>
+    </view>
+
+    <!-- 类型标签 -->
+    <view class="filter-group">
+      <view class="filter-group-header" bindtap="toggleFilterGroup" data-group="type">
+        <view class="filter-group-title">🍽️ 类型</view>
+        <text class="filter-group-arrow">{{filterExpand.type ? '▼' : '▶'}}</text>
+      </view>
+      <view class="filter-group-body" wx:if="{{filterExpand.type}}">
+        <scroll-view class="filter-group-scroll hide-scrollbar" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="filter-group-content">
+            <view
+              class="filter-chip {{utils.hasValue(selectedTypes, 'all') ? 'active' : ''}}"
+              bindtap="toggleType"
+              data-value="all"
+            >全部</view>
+            <view
+              wx:for="{{types}}"
+              wx:key="value"
+              class="filter-chip {{utils.hasValue(selectedTypes, item.value) ? 'active' : ''}}"
+              bindtap="toggleType"
+              data-value="{{item.value}}"
+            >{{item.label}}</view>
+          </view>
+        </scroll-view>
+        <view class="scroll-indicator">→</view>
+      </view>
+    </view>
+
+    <!-- 场景标签 -->
+    <view class="filter-group">
+      <view class="filter-group-header" bindtap="toggleFilterGroup" data-group="scene">
+        <view class="filter-group-title">🎉 场景</view>
+        <text class="filter-group-arrow">{{filterExpand.scene ? '▼' : '▶'}}</text>
+      </view>
+      <view class="filter-group-body" wx:if="{{filterExpand.scene}}">
+        <scroll-view class="filter-group-scroll hide-scrollbar" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="filter-group-content">
+            <view
+              class="filter-chip {{utils.hasValue(selectedScenes, 'all') ? 'active' : ''}}"
+              bindtap="toggleScene"
+              data-value="all"
+            >全部</view>
+            <view
+              wx:for="{{scenes}}"
+              wx:key="value"
+              class="filter-chip {{utils.hasValue(selectedScenes, item.value) ? 'active' : ''}}"
+              bindtap="toggleScene"
+              data-value="{{item.value}}"
+            >{{item.label}}</view>
+          </view>
+        </scroll-view>
+        <view class="scroll-indicator">→</view>
+      </view>
+    </view>
   </view>
 
   <!-- 统计信息 -->
@@ -106,18 +195,16 @@
           mode="aspectFill"
           lazy-load
         />
-        <view class="recipe-card-tag" wx:if="{{item.tags[0]}}">{{item.tags[0]}}</view>
       </view>
       <view class="recipe-card-info">
-        <view class="recipe-card-title">{{item.name}}</view>
+        <view class="recipe-card-header">
+          <view class="recipe-card-title">{{item.name}}</view>
+          <view class="recipe-card-tag">{{item.typeLabel}}</view>
+        </view>
         <view class="recipe-card-meta">
-          <view class="recipe-card-rating" wx:if="{{item.rating > 0}}">
+          <view class="recipe-card-rating">
             <text class="star">★</text>
             <text class="score">{{item.rating}}</text>
-          </view>
-          <view class="recipe-card-rating" wx:else>
-            <text class="star" style="color: var(--color-border);">★</text>
-            <text class="score" style="color: var(--color-text-muted);">未评分</text>
           </view>
           <view class="recipe-card-count">
             <text style="color: var(--color-heart);">♥</text>

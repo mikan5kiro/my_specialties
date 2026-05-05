@@ -1,39 +1,41 @@
 /** 全局样式变量 - 拿手菜小程序（根据设计稿提取） */
 
 page {
-  /* ========== 颜色方案 ========== */
+/* ========== 颜色方案（优化覆盖版） ========== */
 
-  /* 主色调 - 温暖橙色系 */
-  --color-primary: #F5A623;
-  --color-primary-light: #FFC44F;
-  --color-primary-dark: #D4921A;
+/* 主色调 - 更柔和的暖橙 */
+--color-primary: #ffb900;
+--color-primary-light: #FFD27A;
+--color-primary-dark: #D48806;
 
-  /* 背景色 */
-  --color-bg: #FAF6F1;
-  --color-bg-card: #FFFFFF;
-  --color-bg-tag: #FFF8F0;
-  --color-bg-section: #FDFAF5;
-  --color-bg-input: #FFFFFF;
+/* 背景色 - 更偏米色（关键） */
+--color-bg: #FFFBEB;
+--color-bg-card: #fffefb;
+--color-bg-tag: #FFFBEB;
+--color-bg-section: #FBF7F0;
+--color-bg-input: #F8F3EB;
 
-  /* 文字色 */
-  --color-text-primary: #4A3728;
-  --color-text-secondary: #8B7355;
-  --color-text-muted: #B8A99A;
-  --color-text-light: #FFFFFF;
-  --color-text-placeholder: #C8B8A8;
+/* 文字色 - 降低对比，更高级 */
+--color-text-primary: #7b3306;
+--color-text-secondary: #ca4d00;
+--color-text-muted: #999999;
+--color-text-light: #7b3306;
+--color-text-placeholder: #848482;
 
-  /* 功能色 */
-  --color-star: #FFB800;
-  --color-heart: #FF6B8A;
-  --color-success: #27AE60;
-  --color-warning: #F39C12;
-  --color-error: #E74C3C;
+/* 功能色 - 稍微柔一点 */
+--color-star: #F5B50A;
+--color-heart: #FF6B81;
+--color-success: #27AE60;
+--color-warning: #F39C12;
+--color-error: #E74C3C;
 
-  /* 边框与阴影 */
-  --color-border: #E8E0D5;
-  --color-border-light: #F0E8DF;
-  --color-shadow: rgba(245, 166, 35, 0.15);
-  --color-shadow-dark: rgba(245, 166, 35, 0.25);
+/* 边框与阴影 - 更轻 */
+--color-border: #E6D9C8;
+--color-border-light: #EFE5D8;
+--color-border-input: #fee685;
+--color-border-divider: #fef0b8;
+--color-shadow: rgba(0, 0, 0, 0.08);
+--color-shadow-dark: rgba(0, 0, 0, 0.12);
 
   /* ========== 字体方案 ========== */
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
@@ -67,10 +69,10 @@ page {
   --radius-full: 9999rpx;
 
   /* ========== 阴影方案 ========== */
-  --shadow-sm: 0 2rpx 8rpx rgba(245, 166, 35, 0.1);
-  --shadow-md: 0 4rpx 16rpx rgba(245, 166, 35, 0.15);
-  --shadow-lg: 0 8rpx 32rpx rgba(245, 166, 35, 0.2);
-  --shadow-xl: 0 12rpx 48rpx rgba(245, 166, 35, 0.25);
+  --shadow-sm: 0 2rpx 8rpx rgba(227, 223, 209, 0.3);
+  --shadow-md: 0 4rpx 16rpx rgba(227, 223, 209, 0.4);
+  --shadow-lg: 0 8rpx 32rpx rgba(227, 223, 209, 0.5);
+  --shadow-xl: 0 12rpx 48rpx rgba(227, 223, 209, 0.6);
 
   /* ========== 动画方案 ========== */
   --transition-fast: 0.15s ease;
