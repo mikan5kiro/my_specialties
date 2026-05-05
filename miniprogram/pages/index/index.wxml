@@ -1,29 +1,139 @@
-<!--index.wxml-->
-<view class="container">
-  <view class="title">快速了解云开发</view>
-  <view class="top_tip">免鉴权接口调用 免部署后台 高并发</view>
-  <view class="power" wx:key="title" wx:for="{{powerList}}" wx:for-item="power">
-    <view class="power_info" data-index="{{index}}" data-type="{{ power.type }}" bindtap="onClickPowerInfo">
-      <view class="power_info_text">
-        <view class="power_info_text_title">
-          {{power.title}}
-          <view class="power_info_text_tag" wx:if="{{power.tag}}">{{power.tag}}</view>
-        </view>
-        <view class="power_info_text_tip">{{power.tip}}</view>
-      </view>
-      <image wx:if="{{!power.showItem && power.item.length}}" class="power_info_more" src="../../images/arrow.svg"></image>
-      <image wx:if="{{power.showItem && power.item.length}}" class="power_info_less" src="../../images/arrow.svg"></image>
-      <image wx:if="{{!power.item.length}}" class="power_item_icon" src="../../images/arrow.svg"></image>
+<!-- 首页 - 搜索+排序+筛选 三合一 -->
+<view class="home-container">
+  <!-- 页面头部 -->
+  <view class="page-header">
+    <text class="page-header-icon">🍳</text>
+    <view class="page-header-text">
+      <view class="page-header-title">我的食谱本</view>
+      <view class="page-header-subtitle">记录美味时光</view>
     </view>
-    <view wx:if="{{power.showItem}}">
-      <view wx:key="title" wx:for="{{power.item}}">
-        <view class="line"></view>
-        <view class="power_item" bindtap="jumpPage" data-type="{{ item.type }}" data-page="{{item.page}}">
-          <view class="power_item_title">{{item.title}}</view>
-          <image class="power_item_icon" src="../../images/arrow.svg"></image>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <text class="search-bar-icon">🔍</text>
+    <input
+      class="search-bar-input"
+      placeholder="搜索食谱..."
+      value="{{searchKeyword}}"
+      bindinput="onSearchInput"
+      confirm-type="search"
+    />
+    <text class="search-bar-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
+  </view>
+
+  <!-- 筛选标签 -->
+  <scroll-view class="filter-bar hide-scrollbar" scroll-x enhanced show-scrollbar="{{false}}">
+    <view
+      class="filter-tag {{activeFilter === 'all' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="all"
+    >全部</view>
+    <view
+      class="filter-tag {{activeFilter === 'chicken' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="chicken"
+    >鸡肉</view>
+    <view
+      class="filter-tag {{activeFilter === 'beef' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="beef"
+    >牛肉</view>
+    <view
+      class="filter-tag {{activeFilter === 'pork' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="pork"
+    >猪肉</view>
+    <view
+      class="filter-tag {{activeFilter === 'seafood' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="seafood"
+    >海鲜</view>
+    <view
+      class="filter-tag {{activeFilter === 'vegetable' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="vegetable"
+    >素菜</view>
+    <view
+      class="filter-tag {{activeFilter === 'soup' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="soup"
+    >汤羹</view>
+    <view
+      class="filter-tag {{activeFilter === 'dessert' ? 'active' : ''}}"
+      bindtap="onFilterTap"
+      data-filter="dessert"
+    >烘焙</view>
+  </scroll-view>
+
+  <!-- Tab 切换 -->
+  <view class="tab-bar">
+    <view
+      class="tab-item {{activeTab === 'frequent' ? 'active' : ''}}"
+      bindtap="onTabTap"
+      data-tab="frequent"
+    >我常做的</view>
+    <view
+      class="tab-item {{activeTab === 'favorite' ? 'active' : ''}}"
+      bindtap="onTabTap"
+      data-tab="favorite"
+    >我爱吃的</view>
+    <view
+      class="tab-item {{activeTab === 'recent' ? 'active' : ''}}"
+      bindtap="onTabTap"
+      data-tab="recent"
+    >最近想做</view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-bar">
+    <text class="stats-text">共 {{filteredRecipes.length}} 个食谱</text>
+  </view>
+
+  <!-- 菜谱列表 -->
+  <view class="recipe-grid">
+    <view
+      class="recipe-card"
+      wx:for="{{filteredRecipes}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="recipe-card-image-wrap">
+        <image
+          class="recipe-card-image"
+          src="{{item.coverImage || '/images/default-goods-image.png'}}"
+          mode="aspectFill"
+          lazy-load
+        />
+        <view class="recipe-card-tag" wx:if="{{item.tags[0]}}">{{item.tags[0]}}</view>
+      </view>
+      <view class="recipe-card-info">
+        <view class="recipe-card-title">{{item.name}}</view>
+        <view class="recipe-card-meta">
+          <view class="recipe-card-rating" wx:if="{{item.rating > 0}}">
+            <text class="star">★</text>
+            <text class="score">{{item.rating}}</text>
+          </view>
+          <view class="recipe-card-rating" wx:else>
+            <text class="star" style="color: var(--color-border);">★</text>
+            <text class="score" style="color: var(--color-text-muted);">未评分</text>
+          </view>
+          <view class="recipe-card-count">
+            <text style="color: var(--color-heart);">♥</text>
+            <text>{{item.cookCount}}次</text>
+          </view>
         </view>
       </view>
     </view>
   </view>
-  <cloud-tip-modal showTipProps="{{showTip}}" title="{{title}}" content="{{content}}"></cloud-tip-modal>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredRecipes.length === 0}}">
+    <view class="empty-state-icon">🍳</view>
+    <view class="empty-state-text">还没有食谱，快去添加吧~</view>
+  </view>
+
+  <!-- 悬浮添加按钮 -->
+  <view class="fab" bindtap="goToAdd">+</view>
 </view>

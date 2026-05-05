@@ -1,0 +1,79 @@
+/** 全局样式变量 - 拿手菜小程序（根据设计稿提取） */
+
+page {
+  /* ========== 颜色方案 ========== */
+
+  /* 主色调 - 温暖橙色系 */
+  --color-primary: #F5A623;
+  --color-primary-light: #FFC44F;
+  --color-primary-dark: #D4921A;
+
+  /* 背景色 */
+  --color-bg: #FAF6F1;
+  --color-bg-card: #FFFFFF;
+  --color-bg-tag: #FFF8F0;
+  --color-bg-section: #FDFAF5;
+  --color-bg-input: #FFFFFF;
+
+  /* 文字色 */
+  --color-text-primary: #4A3728;
+  --color-text-secondary: #8B7355;
+  --color-text-muted: #B8A99A;
+  --color-text-light: #FFFFFF;
+  --color-text-placeholder: #C8B8A8;
+
+  /* 功能色 */
+  --color-star: #FFB800;
+  --color-heart: #FF6B8A;
+  --color-success: #27AE60;
+  --color-warning: #F39C12;
+  --color-error: #E74C3C;
+
+  /* 边框与阴影 */
+  --color-border: #E8E0D5;
+  --color-border-light: #F0E8DF;
+  --color-shadow: rgba(245, 166, 35, 0.15);
+  --color-shadow-dark: rgba(245, 166, 35, 0.25);
+
+  /* ========== 字体方案 ========== */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+
+  /* 字号层级 */
+  --font-size-xs: 22rpx;
+  --font-size-sm: 24rpx;
+  --font-size-base: 28rpx;
+  --font-size-lg: 32rpx;
+  --font-size-xl: 36rpx;
+  --font-size-xxl: 48rpx;
+
+  /* 字重 */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* ========== 间距方案 ========== */
+  --space-xs: 8rpx;
+  --space-sm: 16rpx;
+  --space-md: 24rpx;
+  --space-lg: 32rpx;
+  --space-xl: 48rpx;
+  --space-xxl: 64rpx;
+
+  /* ========== 圆角方案 ========== */
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-xl: 32rpx;
+  --radius-full: 9999rpx;
+
+  /* ========== 阴影方案 ========== */
+  --shadow-sm: 0 2rpx 8rpx rgba(245, 166, 35, 0.1);
+  --shadow-md: 0 4rpx 16rpx rgba(245, 166, 35, 0.15);
+  --shadow-lg: 0 8rpx 32rpx rgba(245, 166, 35, 0.2);
+  --shadow-xl: 0 12rpx 48rpx rgba(245, 166, 35, 0.25);
+
+  /* ========== 动画方案 ========== */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}

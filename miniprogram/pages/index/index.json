@@ -1,6 +1,7 @@
 {
-  "navigationBarTitleText": "基础能力",
-  "usingComponents": {
-    "cloud-tip-modal": "/components/cloudTipModal/index"
-  }
+  "navigationBarTitleText": "我的食谱本",
+  "navigationBarBackgroundColor": "#FAF6F1",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#FAF6F1",
+  "usingComponents": {}
 }

@@ -4,10 +4,10 @@
     "pages/example/index"
   ],
   "window": {
-    "backgroundColor": "#F6F6F6",
+    "backgroundColor": "#FAF6F1",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarBackgroundColor": "#FAF6F1",
+    "navigationBarTitleText": "我的食谱本",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
