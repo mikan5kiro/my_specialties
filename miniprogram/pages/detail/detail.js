@@ -2,6 +2,16 @@
 Page({
   data: {
     recipe: {},
+    // 弹窗显示状态
+    showRatingPopup: false,
+    showDurationPopup: false,
+    showServingsPopup: false,
+    // 临时评分
+    tempRating: 0,
+    // 时长选项
+    durationOptions: ['15分钟', '30分钟', '45分钟', '60分钟', '90分钟', '2小时', '3小时'],
+    // 份量选项
+    servingsOptions: ['1人份', '2人份', '3人份', '4人份', '5人份', '6人份', '8人份'],
     // 默认示例数据（当没有传入数据时显示）
     defaultIngredients: [
       '500g 高筋面粉',
@@ -132,9 +142,9 @@ Page({
 
   // 编辑菜谱
   onEdit() {
-    wx.showToast({
-      title: '编辑功能开发中',
-      icon: 'none'
+    const { recipe } = this.data
+    wx.navigateTo({
+      url: `/pages/edit/edit?id=${recipe.id || '1'}`
     })
   },
 
@@ -155,6 +165,115 @@ Page({
           }, 1500)
         }
       }
+    })
+  },
+
+  // 显示评分选择弹窗
+  showRatingPicker() {
+    this.setData({
+      showRatingPopup: true,
+      tempRating: this.data.recipe.rating || 0
+    })
+  },
+
+  // 隐藏评分弹窗
+  hideRatingPopup() {
+    this.setData({
+      showRatingPopup: false
+    })
+  },
+
+  // 评分滑块变化
+  onRatingChange(e) {
+    const value = parseFloat(e.detail.value).toFixed(1)
+    this.setData({
+      tempRating: value
+    })
+  },
+
+  // 确认评分
+  confirmRating() {
+    const { tempRating } = this.data
+    this.setData({
+      'recipe.rating': tempRating,
+      showRatingPopup: false
+    })
+    wx.showToast({
+      title: '评分已更新',
+      icon: 'success'
+    })
+    // 这里可以调用API保存评分
+  },
+
+  // 阻止冒泡
+  preventBubble() {
+    // 什么都不做，只是阻止冒泡
+  },
+
+  // 快速增加制作次数
+  quickAddCount() {
+    const newCount = (this.data.recipe.cookCount || 0) + 1
+    this.setData({
+      'recipe.cookCount': newCount
+    })
+    wx.showToast({
+      title: '次数 +1',
+      icon: 'success'
+    })
+    // 这里可以调用API保存次数
+  },
+
+  // 显示时长选择弹窗
+  showDurationPicker() {
+    this.setData({
+      showDurationPopup: true
+    })
+  },
+
+  // 隐藏时长弹窗
+  hideDurationPopup() {
+    this.setData({
+      showDurationPopup: false
+    })
+  },
+
+  // 选择时长
+  selectDuration(e) {
+    const value = e.currentTarget.dataset.value
+    this.setData({
+      'recipe.duration': value,
+      showDurationPopup: false
+    })
+    wx.showToast({
+      title: '时长已更新',
+      icon: 'success'
+    })
+  },
+
+  // 显示份量选择弹窗
+  showServingsPicker() {
+    this.setData({
+      showServingsPopup: true
+    })
+  },
+
+  // 隐藏份量弹窗
+  hideServingsPopup() {
+    this.setData({
+      showServingsPopup: false
+    })
+  },
+
+  // 选择份量
+  selectServings(e) {
+    const value = e.currentTarget.dataset.value
+    this.setData({
+      'recipe.servings': value,
+      showServingsPopup: false
+    })
+    wx.showToast({
+      title: '份量已更新',
+      icon: 'success'
     })
   }
 })

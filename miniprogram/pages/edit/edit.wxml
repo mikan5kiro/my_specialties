@@ -1,0 +1,195 @@
+<!-- 编辑/添加菜谱页 -->
+<view class="edit-container">
+  <!-- 模式切换 -->
+  <view class="mode-switch">
+    <view class="mode-btn {{mode === 'manual' ? 'active' : ''}}" bindtap="switchMode" data-mode="manual">
+      <text class="mode-icon">✏️</text>
+      <text>手动填写</text>
+    </view>
+    <view class="mode-btn {{mode === 'paste' ? 'active' : ''}}" bindtap="switchMode" data-mode="paste">
+      <text class="mode-icon">📋</text>
+      <text>粘贴解析</text>
+    </view>
+  </view>
+
+  <!-- 粘贴解析模式 -->
+  <view class="paste-section" wx:if="{{mode === 'paste'}}">
+    <view class="paste-input-wrap">
+      <textarea 
+        class="paste-textarea" 
+        placeholder="从任意平台复制菜谱文字，粘贴到这里...&#10;&#10;示例：&#10;🍗红烧肉&#10;五花肉500g，冰糖20g&#10;1️⃣切块焯水&#10;2️⃣炒糖色炖40分钟"
+        value="{{pasteText}}"
+        bindinput="onPasteInput"
+      />
+    </view>
+    <button class="parse-btn" bindtap="parseRecipe">🔍 智能解析</button>
+  </view>
+
+  <!-- 表单区域 -->
+  <view class="form-section">
+    <!-- 图片上传 -->
+    <view class="form-group">
+      <view class="form-label">📷 封面图片</view>
+      <view class="image-upload" bindtap="chooseImage">
+        <image wx:if="{{recipe.coverImage}}" class="upload-preview" src="{{recipe.coverImage}}" mode="aspectFill"/>
+        <view wx:else class="upload-placeholder">
+          <text class="upload-icon">📷</text>
+          <text class="upload-text">点击上传图片</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 菜名 -->
+    <view class="form-group">
+      <view class="form-label">🍽️ 菜名</view>
+      <input 
+        class="form-input" 
+        placeholder="请输入菜名"
+        value="{{recipe.name}}"
+        bindinput="onNameInput"
+      />
+    </view>
+
+    <!-- 标签选择 -->
+    <view class="form-group">
+      <view class="form-label">🏷️ 标签</view>
+      <view class="tags-section">
+        <!-- 食材标签 -->
+        <view class="tag-category">
+          <view class="tag-category-title">食材</view>
+          <view class="tag-list">
+            <view 
+              wx:for="{{ingredientTags}}" 
+              wx:key="*this"
+              class="tag-item {{recipe.ingredientLabel === item ? 'active' : ''}}"
+              bindtap="selectIngredientTag"
+              data-tag="{{item}}"
+            >{{item}}</view>
+          </view>
+        </view>
+        <!-- 类型标签 -->
+        <view class="tag-category">
+          <view class="tag-category-title">类型</view>
+          <view class="tag-list">
+            <view 
+              wx:for="{{typeTags}}" 
+              wx:key="*this"
+              class="tag-item {{recipe.typeLabel === item ? 'active' : ''}}"
+              bindtap="selectTypeTag"
+              data-tag="{{item}}"
+            >{{item}}</view>
+          </view>
+        </view>
+        <!-- 场景标签 -->
+        <view class="tag-category">
+          <view class="tag-category-title">场景</view>
+          <view class="tag-list">
+            <view 
+              wx:for="{{sceneTags}}" 
+              wx:key="*this"
+              class="tag-item {{recipe.sceneLabel === item ? 'active' : ''}}"
+              bindtap="selectSceneTag"
+              data-tag="{{item}}"
+            >{{item}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 食材清单 -->
+    <view class="form-group">
+      <view class="form-label">
+        <text>🥬 食材清单</text>
+        <text class="form-hint">每行一个食材</text>
+      </view>
+      <textarea 
+        class="form-textarea" 
+        placeholder="例如：&#10;五花肉 500g&#10;冰糖 20g&#10;生抽 2勺"
+        value="{{ingredientsText}}"
+        bindinput="onIngredientsInput"
+      />
+    </view>
+
+    <!-- 制作步骤 -->
+    <view class="form-group">
+      <view class="form-label">
+        <text>📖 制作步骤</text>
+        <text class="form-hint">每行一个步骤</text>
+      </view>
+      <textarea 
+        class="form-textarea steps-textarea" 
+        placeholder="例如：&#10;五花肉切块焯水&#10;锅中放油炒糖色&#10;加入调料炖40分钟&#10;大火收汁出锅"
+        value="{{stepsText}}"
+        bindinput="onStepsInput"
+      />
+    </view>
+
+    <!-- 小贴士 -->
+    <view class="form-group">
+      <view class="form-label">💡 小贴士（选填）</view>
+      <textarea 
+        class="form-textarea tips-textarea" 
+        placeholder="有什么注意事项或窍门？"
+        value="{{recipe.tips}}"
+        bindinput="onTipsInput"
+      />
+    </view>
+
+    <!-- 评分和次数 -->
+    <view class="form-row">
+      <view class="form-group half">
+        <view class="form-label">⭐ 喜爱度</view>
+        <view class="rating-select">
+          <text 
+            wx:for="{{[1,2,3,4,5]}}" 
+            wx:key="*this"
+            class="rating-star {{recipe.rating >= item ? 'active' : ''}}"
+            bindtap="selectRating"
+            data-score="{{item}}"
+          >⭐</text>
+        </view>
+      </view>
+      <view class="form-group half">
+        <view class="form-label">💕 做过次数</view>
+        <input 
+          class="form-input" 
+          type="number"
+          placeholder="0"
+          value="{{recipe.cookCount}}"
+          bindinput="onCountInput"
+        />
+      </view>
+    </view>
+
+    <!-- 时长和份量 -->
+    <view class="form-row">
+      <view class="form-group half">
+        <view class="form-label">⏱️ 用时</view>
+        <input 
+          class="form-input" 
+          placeholder="如：60分钟"
+          value="{{recipe.duration}}"
+          bindinput="onDurationInput"
+        />
+      </view>
+      <view class="form-group half">
+        <view class="form-label">👥 份量</view>
+        <input 
+          class="form-input" 
+          placeholder="如：4人份"
+          value="{{recipe.servings}}"
+          bindinput="onServingsInput"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部占位 -->
+  <view class="edit-footer"></view>
+</view>
+
+<!-- 底部操作栏 -->
+<view class="edit-actions">
+  <button class="action-btn btn-cancel" bindtap="onCancel">取消</button>
+  <button class="action-btn btn-save" bindtap="onSave">保存</button>
+</view>

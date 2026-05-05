@@ -34,3 +34,19 @@
   color: #ffffff !important;
   border-color: #ffb900 !important;
 }
+
+/* 首页 emoji 调大 */
+.sort-dropdown-item-icon {
+  font-size: 32rpx;
+}
+
+.recipe-card-rating .star,
+.recipe-card-count {
+  font-size: 28rpx;
+}
+
+/* 首页加号按钮 - 主题色纯色 */
+.fab {
+  background: var(--color-primary) !important;
+  color: #ffffff !important;
+}

@@ -58,7 +58,7 @@
           bindtap="onSortSelect"
           data-sort="favorite"
         >
-          <text class="sort-dropdown-item-icon">❤️</text>
+          <text class="sort-dropdown-item-icon">⭐</text>
           <text>按喜爱程度排序</text>
         </view>
         <view
@@ -203,11 +203,11 @@
         </view>
         <view class="recipe-card-meta">
           <view class="recipe-card-rating">
-            <text class="star">★</text>
+            <text class="star">⭐</text>
             <text class="score">{{item.rating}}</text>
           </view>
           <view class="recipe-card-count">
-            <text style="color: var(--color-heart);">♥</text>
+            <text style="color: var(--color-heart);">💕</text>
             <text>{{item.cookCount}}次</text>
           </view>
         </view>

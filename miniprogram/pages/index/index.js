@@ -217,8 +217,8 @@ Page({
     }
     const sortIconMap = {
       default: '📋',
-      favorite: '❤️',
-      frequent: '🔥',
+      favorite: '⭐',
+      frequent: '💕',
       recent: '📝'
     }
     this.setData({
@@ -397,7 +397,7 @@ toggleTag(field, value) {
   // 跳转到添加页
   goToAdd() {
     wx.navigateTo({
-      url: '/pages/add/add'
+      url: '/pages/edit/edit'
     })
   }
 })

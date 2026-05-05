@@ -1,44 +1,113 @@
-<!-- 详情页 - 所有内容合并为一个卡片 -->
+<!-- 详情页 - 引用全局组件样式 -->
 <view class="detail-container">
-  <!-- 唯一卡片：图片/标题/标签/信息/食材/做法/小贴士 -->
+  <!-- 主卡片 -->
   <view class="detail-card">
-    <!-- 图片区域：标题和标签覆盖在图片上 -->
+    <!-- 图片区域 -->
     <view class="detail-image-wrap">
-      <image class="detail-cover" src="{{recipe.coverImage || '/images/default-food.png'}}" mode="aspectFill"></image>
+      <image class="detail-cover" src="{{recipe.coverImage || '/images/default-food.png'}}" mode="aspectFill"/>
       <view class="detail-image-overlay">
         <text class="detail-title">{{recipe.name}}</text>
         <view class="detail-tags">
-          <view class="detail-tag ingredient-tag">{{recipe.ingredientLabel || '猪肉'}}</view>
-          <view class="detail-tag type-tag">{{recipe.typeLabel}}</view>
-          <view class="detail-tag scene-tag">{{recipe.sceneLabel || '宴客菜'}}</view>
+          <view class="detail-tag">{{recipe.ingredientLabel || '猪肉'}}</view>
+          <view class="detail-tag">{{recipe.typeLabel}}</view>
+          <view class="detail-tag">{{recipe.sceneLabel || '宴客菜'}}</view>
         </view>
       </view>
     </view>
 
     <!-- 信息栏 -->
     <view class="detail-info-bar">
-      <view class="info-item">
+      <view class="info-item quick-edit" bindtap="showDurationPicker">
         <text class="info-icon">⏱</text>
         <text class="info-text">{{recipe.duration || '90分钟'}}</text>
       </view>
-      <view class="info-item">
+      <view class="info-item quick-edit" bindtap="showServingsPicker">
         <text class="info-icon">👥</text>
         <text class="info-text">{{recipe.servings || '4人份'}}</text>
       </view>
-      <view class="info-item">
+      <view class="info-item quick-edit" bindtap="showRatingPicker">
         <text class="info-icon">⭐</text>
         <text class="info-text">{{recipe.rating}}</text>
       </view>
-      <view class="info-item">
+      <view class="info-item quick-edit" bindtap="quickAddCount">
         <text class="info-icon">💕</text>
         <text class="info-text">做过{{recipe.cookCount}}次</text>
+      </view>
+    </view>
+
+    <!-- 评分选择弹窗 -->
+    <view class="rating-popup" wx:if="{{showRatingPopup}}" bindtap="hideRatingPopup">
+      <view class="rating-popup-content" catchtap="preventBubble">
+        <view class="rating-popup-title">选择评分</view>
+        <view class="rating-slider-display">
+          <text class="rating-big-star">⭐</text>
+          <text class="rating-value">{{tempRating}}</text>
+        </view>
+        <slider 
+          class="rating-slider" 
+          min="0" 
+          max="5" 
+          step="0.1" 
+          value="{{tempRating}}"
+          activeColor="#FFB900"
+          backgroundColor="#E8E8E8"
+          block-size="20"
+          bindchanging="onRatingChange"
+          bindchange="onRatingChange"
+        />
+        <view class="rating-range-hint">
+          <text>0</text>
+          <text>5</text>
+        </view>
+        <view class="rating-popup-actions">
+          <button class="popup-btn btn-cancel" bindtap="hideRatingPopup">取消</button>
+          <button class="popup-btn btn-confirm" bindtap="confirmRating">确定</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 时长选择弹窗 -->
+    <view class="rating-popup" wx:if="{{showDurationPopup}}" bindtap="hideDurationPopup">
+      <view class="rating-popup-content" catchtap="preventBubble">
+        <view class="rating-popup-title">选择烹饪时长</view>
+        <view class="quick-input-list">
+          <view 
+            wx:for="{{durationOptions}}" 
+            wx:key="*this"
+            class="quick-input-item {{recipe.duration === item ? 'active' : ''}}"
+            bindtap="selectDuration"
+            data-value="{{item}}"
+          >{{item}}</view>
+        </view>
+        <view class="rating-popup-actions">
+          <button class="popup-btn btn-cancel" bindtap="hideDurationPopup">取消</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 份量选择弹窗 -->
+    <view class="rating-popup" wx:if="{{showServingsPopup}}" bindtap="hideServingsPopup">
+      <view class="rating-popup-content" catchtap="preventBubble">
+        <view class="rating-popup-title">选择份量</view>
+        <view class="quick-input-list">
+          <view 
+            wx:for="{{servingsOptions}}" 
+            wx:key="*this"
+            class="quick-input-item {{recipe.servings === item ? 'active' : ''}}"
+            bindtap="selectServings"
+            data-value="{{item}}"
+          >{{item}}</view>
+        </view>
+        <view class="rating-popup-actions">
+          <button class="popup-btn btn-cancel" bindtap="hideServingsPopup">取消</button>
+        </view>
       </view>
     </view>
 
     <!-- 食材区域 -->
     <view class="detail-content-section">
       <view class="section-header">
-        <text class="section-icon">🥘</text>
+        <text class="section-icon">🥬</text>
         <text class="section-title">食材</text>
       </view>
       <view class="ingredients-list">
@@ -63,7 +132,7 @@
     </view>
 
     <!-- 小贴士区域 -->
-    <view class="detail-content-section" wx:if="{{recipe.tips || defaultTips}}">
+    <view class="detail-content-section no-border" wx:if="{{recipe.tips || defaultTips}}">
       <view class="tip-section">
         <view class="section-header">
           <text class="section-icon">💡</text>
@@ -76,13 +145,13 @@
     </view>
   </view>
 
-  <!-- 操作按钮区 -->
+  <!-- 底部悬浮操作栏 -->
   <view class="detail-actions">
-    <view class="action-btn action-want" bindtap="onToggleWant">
+    <view class="action-btn" bindtap="onToggleWant">
       <text class="action-icon">📝</text>
       <text class="action-text">{{recipe.recent ? '已想做' : '最近想做'}}</text>
     </view>
-    <view class="action-btn action-edit" bindtap="onEdit">
+    <view class="action-btn" bindtap="onEdit">
       <text class="action-icon">✏️</text>
       <text class="action-text">编辑</text>
     </view>
@@ -92,6 +161,6 @@
     </view>
   </view>
 
-  <!-- 底部间距 -->
-  <view class="detail-footer"></view>
+  <!-- 底部占位 -->
+  <view class="detail-footer"/>
 </view>
